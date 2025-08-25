@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayNotEmpty,
   IsArray,
@@ -12,14 +13,17 @@ export class CreateGroupPostDto {
   @IsNotEmpty({ each: true })
   @IsArray()
   @ArrayNotEmpty()
+  @ApiProperty()
   userIds : number[];
 
   @IsNotEmpty()
   @IsString()
   @MaxLength(200)
+  @ApiProperty()
   title: string;
 
   @IsString()
   @IsNotEmpty()
+  @ApiProperty()
   description: string;
 }
