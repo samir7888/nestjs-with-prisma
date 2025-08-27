@@ -33,6 +33,6 @@ export class AuthService {
     // Remove password from user data before creating JWT
     const { password: userPassword, ...userData } = existingUser;
 
-    return this.authservice.sign(userData);
+    return { access_token: this.authservice.sign(userData) };
   }
 }
