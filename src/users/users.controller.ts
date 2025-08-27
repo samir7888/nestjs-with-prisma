@@ -8,10 +8,10 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Put,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
@@ -23,8 +23,20 @@ export class UsersController {
 
   @Post('create')
   @UsePipes(ValidationPipe)
-  createUser(@Body() data: CreateUserDto) {
-    return this.userserive.createUser(data);
+  async createUser(@Body() data: CreateUserDto) {
+    const { password, ...userData } = data;
+
+    // Hash the password with bcrypt
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Create user data with hashed password
+    const hashedData = {
+      ...userData,
+      password: hashedPassword,
+    };
+
+    return this.userserive.createUser(hashedData);
   }
 
   @Get()
